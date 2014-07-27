@@ -5,10 +5,9 @@
   (cond
     (symbol? x) (:arglists (meta (resolve x)))
 
-    (fn? x) (->> (.getDeclaredMethods (class x))
-                 (filter #(= (.getName %) "invoke"))
-                 (map #(.getParameterTypes %))
-                 (map vec))
+    (ifn? x) (->> (.getDeclaredMethods (class x))
+                  (filter #(= (.getName %) "invoke"))
+                  (map #(.getParameterTypes %)))
 
     :else nil))
 
