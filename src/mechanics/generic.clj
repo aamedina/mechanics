@@ -1,8 +1,24 @@
 (ns mechanics.generic)
 
+(defn arglists
+  [x]
+  (cond
+    (symbol? x) (:arglists (meta (resolve x)))
+
+    (fn? x) (->> (.getDeclaredMethods (class x))
+                 (filter #(= (.getName %) "invoke"))
+                 (map #(.getParameterTypes %))
+                 (map vec))
+
+    :else nil))
+
+(defn variadic?
+  [x]
+  (or (and (symbol? x) (contains? (set (last (arglists x))) '&))
+      (and (fn? x) (instance? clojure.lang.RestFn x))))
+
 (defn arity
-  [procedure]
-  (when-let [{:keys [arglists] :as metadata} (meta (resolve procedure))]
-    (let [[min-args max-args] (apply (juxt min max) (map count arglists))
-          variadic? (contains? (set (last arglists)) '&)]
-      [min-args (if variadic? false max-args)])))
+  [x]
+  (when-let [args (arglists x)]
+    (let [[min-args max-args] (apply (juxt min max) (map count args))]
+      [min-args (if (variadic? x) false max-args)])))
