@@ -1,6 +1,15 @@
-(ns mechanics.core)
+(ns mechanics.core
+  (:gen-class)
+  (:require [criterium.core :refer [quick-bench]]))
 
-(defn foo
-  "I don't do a whole lot."
+(definline sqrt
   [x]
-  (println x "Hello, World!"))
+  `(Math/sqrt ~x))
+
+(definline square
+  [x]
+  `(* ~x ~x))
+
+(defn -main
+  [& args]
+  (println "Hello, world!"))
