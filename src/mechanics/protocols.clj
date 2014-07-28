@@ -1,6 +1,12 @@
 (ns mechanics.protocols
   (:refer-clojure :exclude [zero?]))
 
+(defprotocol Num
+  (plus [x y])
+  (sub [x y])
+  (mult [x y])
+  (div [x y]))
+
 (defprotocol TypePredicate
   (type-predicate [x]))
 
@@ -17,6 +23,12 @@
   (one? [x]))
 
 (extend-type Number
+  Num
+  (plus [x y] (+ x y))
+  (mult [x y] (* x y))
+  (sub [x y] (- x y))
+  (div [x y] (/ x y))
+  
   TypePredicate
   (type-predicate [x] number?)
   
