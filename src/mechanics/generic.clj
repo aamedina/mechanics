@@ -68,3 +68,33 @@
 (defn negate
   [x]
   (- (impl/zero-like x) x))
+
+(defn invert
+  [x]
+  (/ (impl/one-like x) x))
+
+(definline sqrt
+  [x]
+  `(Math/sqrt ~x))
+
+(definline square
+  [x]
+  `(* ~x ~x))
+
+(definline cube
+  [x]
+  `(* ~x ~x ~x))
+
+(definline abs
+  [x]
+  `(impl/abs ~x))
+
+(definline exp
+  [x]
+  `(impl/exp ~x))
+
+(definline exp10
+  [x]
+  (if (number? x)
+    `(* ~@(repeat x 10))
+    `(* (repeat ~x 10))))
