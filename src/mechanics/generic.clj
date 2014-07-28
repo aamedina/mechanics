@@ -2,6 +2,10 @@
   (:refer-clojure :exclude [* / + -])
   (:require [mechanics.protocols :as impl]))
 
+(defn numeric?
+  [x]
+  (satisfies? impl/Num x))
+
 (defn- >1? [n] (clojure.lang.Numbers/gt n 1))
 (defn- >0? [n] (clojure.lang.Numbers/gt n 0))
 
@@ -17,7 +21,7 @@
   {:inline (nary-inline 'mechanics.protocols/plus)
    :inline-arities >1?}
   ([] 0)
-  ([x] {:pre [(satisfies? impl/Num x)]} x)
+  ([x] x)
   ([x y] (impl/plus x y))
   ([x y & more] (reduce impl/plus (impl/plus x y) more)))
 
@@ -25,7 +29,7 @@
   {:inline (nary-inline 'mechanics.protocols/mult)
    :inline-arities >1?}
   ([] 1)
-  ([x] {:pre [(satisfies? impl/Num x)]} x)
+  ([x] x)
   ([x y] (impl/mult x y))
   ([x y & more] (reduce impl/mult (impl/mult x y) more)))
 
@@ -95,6 +99,76 @@
 
 (definline exp10
   [x]
-  (if (number? x)
+  (if (numeric? x)
     `(* ~@(repeat x 10))
-    `(* (repeat ~x 10))))
+    `(apply * (repeat ~x 10))))
+
+(definline exp2
+  [x]
+  (if (numeric? x)
+    `(* ~@(repeat x 2))
+    `(apply * (repeat ~x 2))))
+
+(definline log
+  [x]
+  `(impl/log ~x))
+
+(definline log10
+  [x]
+  `(/ (log ~x) ~(log 10)))
+
+(definline log2
+  [x]
+  `(/ (log ~x) ~(log 2)))
+
+(definline sin
+  [x]
+  `(impl/sin ~x))
+
+(definline cos
+  [x]
+  `(impl/cos ~x))
+
+(definline tan
+  [x]
+  `(impl/tan ~x))
+
+(definline sec
+  [x]
+  `(/ 1 (cos ~x)))
+
+(definline csc
+  [x]
+  `(/ 1 (sin ~x)))
+
+(definline asin
+  [x]
+  `(impl/asin ~x))
+
+(definline acos
+  [x]
+  `(impl/acos ~x))
+
+(definline atan
+  [x]
+  `(impl/atan ~x))
+
+(definline sinh
+  [x]
+  `(impl/sinh ~x))
+
+(definline cosh
+  [x]
+  `(impl/cosh ~x))
+
+(definline tanh
+  [x]
+  `(/ (sinh ~x) (cosh ~x)))
+
+(definline sech
+  [x]
+  `(/ 1 (cosh ~x)))
+
+(definline csch
+  [x]
+  `(/ 1 (sinh ~x)))
