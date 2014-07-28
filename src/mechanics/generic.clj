@@ -89,6 +89,12 @@
   [x]
   `(* ~x ~x ~x))
 
+(definline gcd
+  [x val]
+  (if (and (numeric? x) (numeric? val))
+    (.gcd (biginteger x) (biginteger val))
+    `(.gcd (biginteger ~x) (biginteger ~val))))
+
 (definline abs
   [x]
   `(impl/abs ~x))
@@ -172,3 +178,31 @@
 (definline csch
   [x]
   `(/ 1 (sinh ~x)))
+
+(defn make-rectangular
+  [a1 a2])
+
+(defn make-polar
+  [a1 a2])
+
+(defn real-part
+  [z])
+
+(defn imag-part
+  [z])
+
+(defn magnitude
+  [z])
+
+(defn angle
+  [z])
+
+(defn conjugate
+  [z])
+
+(defn determinant
+  [mat])
+
+(defn trace
+  [mat])
+
